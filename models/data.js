@@ -2,10 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var imageSchema = new Schema({
-    name: String,
-    url: String,
-    discription: String
-});
+    searchVal: String,
+    searchDate: Date
+}, { timestamps: true });
 
 var Images = mongoose.model('Images', imageSchema);
 

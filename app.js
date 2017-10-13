@@ -11,22 +11,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 mongoose.connect('mongodb://127.0.0.1:27017/imageData');
 
 
-var imageSearch = new Images({
-    name: "nice cat",
-    url: "http://url",
-    description: "awesome photo"
-});
-imageSearch.save(function(err) {
-    if (err) {
-        throw err;
-    } else {
-        console.log("Data has been saved");
-    }
+app.get('/api/recentSearch', function(req, res, next) {
+    Images.find({}, function(error, data) {
+        res.json(data);
+    })
 })
 
 app.get('/api/imagesearch/:searchVal*', function(req, res) {
     var { searchVal } = req.params;
     //var offset = req.query;
+    var imageSearch = new Images({
+        searchVal: searchVal,
+        searchDate: new Date()
+    });
+    imageSearch.save(function(err) {
+        if (err) {
+            throw err;
+        } else {
+            console.log("Data has been saved");
+        }
+    });
     console.log(searchVal);
     //res.send('Hello World!')
     Bing.images(searchVal, {
