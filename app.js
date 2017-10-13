@@ -24,19 +24,27 @@ imageSearch.save(function(err) {
     }
 })
 
-app.get('/api/imagesearch/:image*', function(req, res) {
-    var image = req.params;
-    var offset = req.query;
-    console.log(image.image);
+app.get('/api/imagesearch/:searchVal*', function(req, res) {
+    var { searchVal } = req.params;
+    //var offset = req.query;
+    console.log(searchVal);
     //res.send('Hello World!')
-    Bing.images(image.image, {
+    Bing.images(searchVal, {
         count: 10,
-        offset: 5
-    }, function(error, body) {
+        offset: 3
+    }, function(error, rez, body) {
 
-        //var json = JSON.parse(body);
+        var dataArray = [];
+        for (var i = 0; i < 10; i++) {
+            dataArray.push({
+                url: body.value[i].webSearchUrl,
+                snippet: body.value[i].name,
+                thumbnail: body.value[i].thumbnailUrl,
+                context: body.value[i].hostPageDisplayUrl
+            });
+        }
 
-        res.json(body);
+        res.json(dataArray);
 
     });
     //res.send('hello ninja');
